@@ -281,37 +281,7 @@ const PaperSelect = ({
       </View>
 
       <View>
-        <Portal>
-          <Dialog
-            style={[styles.dialog, dialogStyle]}
-            visible={visible}
-            dismissable={false}
-          >
-            <Dialog.Title style={dialogTitleStyle}>
-              {dialogTitle ?? label}
-            </Dialog.Title>
-            <Dialog.ScrollArea style={{ paddingHorizontal: 14 }}>
-              {!hideSearchBox ? (
-                <Searchbar
-                  {...searchbarPropsOverrides}
-                  value={searchKey}
-                  placeholder={searchText}
-                  onChangeText={(text: string) => _filterFunction(text)}
-                  style={[styles.searchbar, searchStyle]}
-                />
-              ) : null}
 
-              {/* <ScrollView
-                style={
-                  (styles.dialogScrollView,
-                    { maxHeight: height - (height * 40) / 100, marginBottom: 8 })
-                }
-                keyboardShouldPersistTaps="handled"
-              >
-                {multiEnable === true
-                  ? _renderListForMulti()
-                  : _renderListForSingle()}
-              </ScrollView> */}
               <FlatList
                 ListHeaderComponent={
                   multiEnable === true && selectAllEnable === true ? (
@@ -355,8 +325,7 @@ const PaperSelect = ({
                   {limitError}
                 </Text>
               ) : null}
-            </Dialog.ScrollArea>
-            <Dialog.Actions>
+            <View>
               <Button
                 labelStyle={dialogCloseButtonStyle}
                 onPress={_closeDialog}
@@ -366,9 +335,7 @@ const PaperSelect = ({
               <Button labelStyle={dialogDoneButtonStyle} onPress={_hideDialog}>
                 {dialogDoneButtonText}
               </Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
+              </View>
       </View>
     </ThemeProvider>
   );
