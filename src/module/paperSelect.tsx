@@ -169,36 +169,77 @@ const PaperSelect = ({
   };
 
   const _onChecked = (item: any) => {
-    var selectedData = [...selectedList];
-    // const index = data.findIndex(x => x._id === item._id);
+    let selectedData = [...selectedList];
     const indexSelected = selectedData.findIndex((val) => val._id === item._id);
+  
     if (indexSelected > -1) {
+      // If the item is already in the selected list, remove it
       selectedData.splice(indexSelected, 1);
     } else {
+      // If there's a limit and it is reached, show an error
       if (limit && selectedData.length === limit) {
         setShowLimitError(true);
       } else {
         setShowLimitError(false);
         selectedData.push(item);
+        setSearchKey('');
       }
     }
+  
+    // Update the finalText based on the new selectedData
+    const data: Array<ListItem> = [...arrayHolder];
+    let finalText: string = '';
+  
+    selectedData.forEach((val, index) => {
+      data.forEach((el) => {
+        if (val._id === el._id) {
+          finalText += index !== selectedData.length - 1 ? `${el.value}, ` : `${el.value}`;
+        }
+      });
+    });
+  
+    // Call the onSelection with the updated text and selectedData
+    onSelection({
+      text: finalText,
+      selectedList: selectedData,
+    });
+  
+    // Update the selectedList state
     setSelectedList([...selectedData]);
   };
+  
 
   const _onCheckedSingle = (item: any) => {
-    var selectedData = [...selectedList];
-    // const index = data.findIndex(x => x._id === item._id);
+    let selectedData = [...selectedList];
     const indexSelected = selectedData.findIndex((val) => val._id === item._id);
+  
     if (indexSelected > -1) {
-      // selectedData.splice(indexSelected, 1);
+      // If the item is already in the selected list, remove all selections
       selectedData = [];
     } else {
-      selectedData = [];
-      selectedData.push(item);
+      // If the item is not in the selected list, select only this item
+      selectedData = [item];
+      setSearchKey('');
     }
-    // console.log(selectedData);
+  
+    const data: Array<ListItem> = [...arrayHolder];
+    let finalText: string = '';
+    selectedData.forEach((val, index) => {
+      data.forEach((el) => {
+        if (val._id === el._id) {
+          finalText += index !== selectedData.length - 1 ? `${el.value}, ` : `${el.value}`;
+        }
+      });
+    });
+  
+    onSelection({
+      text: finalText,
+      selectedList: selectedData,
+    });
+  
     setSelectedList([...selectedData]);
   };
+  
 
   const _exists = (item: any) => {
     // console.log(selectedList);
@@ -253,7 +294,7 @@ const PaperSelect = ({
   return (
     <ThemeProvider theme={theme}>
       <View style={[styles.container, containerStyle]}>
-        <TextInput
+        {/* <TextInput
           {...textInputProps}
           ref={selectInputRef}
           disabled={disabled}
@@ -265,7 +306,7 @@ const PaperSelect = ({
           showSoftInputOnFocus={false}
           value={value}
           textColor={textColor}
-        />
+        /> */}
         {errorText ? (
           <Text
             style={[
@@ -325,7 +366,7 @@ const PaperSelect = ({
                   {limitError}
                 </Text>
               ) : null}
-            <View>
+            {/* <View>
               <Button
                 labelStyle={dialogCloseButtonStyle}
                 onPress={_closeDialog}
@@ -335,7 +376,7 @@ const PaperSelect = ({
               <Button labelStyle={dialogDoneButtonStyle} onPress={_hideDialog}>
                 {dialogDoneButtonText}
               </Button>
-              </View>
+              </View> */}
       </View>
     </ThemeProvider>
   );
